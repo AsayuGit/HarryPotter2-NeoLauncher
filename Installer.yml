@@ -1,0 +1,61 @@
+files:
+- noCDPatch:
+    filename: nocd.7z
+    url: https://files.lonebullet.com/harry-potter-the-chamber-of-secrets/cracks/harry-potter-and-the-chamber-of-secrets-v10-english-no-cd.zip?
+- SysPatch:
+    filename: system.zip
+    url: https://github.com/AsayuGit/HarryPotter2-NeoLauncher/releases/latest/download/system.zip
+game:
+  arch: win32
+  exe: $GAMEDIR/drive_c/Program Files/EA Games/Harry Potter and the Chamber of Secrets/system/Harry.bat
+  prefix: $GAMEDIR
+install_complete_text: Installation complete! Enjoy!
+installer:
+- insert-disc:
+    requires: AutoRun.exe
+- task:
+    arch: win32
+    description: Creating Wine prefix
+    install_gecko: false
+    install_mono: false
+    name: create_prefix
+    prefix: $GAMEDIR
+- task:
+    arch: win32
+    description: Installing Harry Potter and the Chamber of Secrets ...
+    executable: $DISC/AutoRun.exe
+    name: wineexec
+    working_dir: $DISC
+- move:
+    dst: $CACHE
+    src: noCDPatch
+- move:
+    dst: $CACHE
+    src: SysPatch
+- execute:
+    command: GAME_FOLDER=$(ls "$GAMEDIR/drive_c/Program Files/EA Games/" | grep -i "Harry");
+      7z x -plonebullet $CACHE/nocd.7z -o$CACHE -aoa;
+      7z x $CACHE/harry-potter-and-the-chamber-of-secrets-v10-english-no-cd.zip -o$GAMEDIR/"drive_c/Program Files/EA Games/$GAME_FOLDER/system" -aoa;
+      7z x $CACHE/system.zip -o$GAMEDIR/"drive_c/Program Files/EA Games/$GAME_FOLDER/" -aoa;
+      mv "$GAMEDIR/drive_c/Program Files/EA Games/$GAME_FOLDER" "$GAMEDIR/drive_c/Program Files/EA Games/Harry Potter and the Chamber of Secrets"
+- execute:
+    command: mkdir "$GAMEDIR/drive_c/users/$USER/My Documents/Harry Potter II"
+require-binaries: 7z
+system:
+  disable_runtime: false
+  env:
+    PULSE_LATENCY_MSEC: '60'
+  prefer_system_libs: true
+  terminal: false
+wine:
+  ShowCrashDialog: false
+  autoconf_joypad: false
+  dxvk: true
+  dxvk_version: 1.7.3L-03f11ba
+  overrides:
+    VistaAPI.dll: native, builtin
+    ddraw: native, builtin
+  version: lutris-5.6-5-x86_64
+  vkd3d: false
+  x360ce-dinput: false
+  x360ce-path: ''
