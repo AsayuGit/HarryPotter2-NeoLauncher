@@ -16,6 +16,9 @@ int fileCopy(char* Src, char* Dst){
 	size_t SrcFileSize;
 	char* FileData;
 
+	SrcFile = NULL;
+	DstFile = NULL;
+
 	SrcFile = fopen(Src, "rb"); // Try to open the source file in "read binary" mode
 	if (SrcFile == NULL){
 		fprintf(stderr, ErrorLabels[ERROR_FileNotFound], Src);

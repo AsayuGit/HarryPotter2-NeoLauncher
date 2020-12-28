@@ -21,9 +21,9 @@
 #include "aboutWindow.h"
 #include "menus.h"
 
-#define CONFIGPATH "Harry Potter II/"
-#define GAMEINI "%s/"CONFIGPATH"Game.ini"
-#define USERINI "%s/"CONFIGPATH"User.ini"
+#define CONFIGPATH "/Harry Potter II"
+#define GAMEINI "%s/Game.ini"
+#define USERINI "%s/User.ini"
 
 #define DEF_GAMEINI "Default.ini"
 #define DEF_USERINI "DefUser.ini"
@@ -43,7 +43,7 @@
 #define LOAD " -LOADGAME=0 -SAVESLOT="
 #define START " PrivetDr.unr -SAVESLOT="
 
-#define VERSION L"Version v1.0"
+#define VERSION L"Version v1.1"
 #define GITLINK L"https://github.com/AsayuGit"
 
 #endif

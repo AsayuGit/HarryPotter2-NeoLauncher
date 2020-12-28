@@ -51,7 +51,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 	};
+
 #ifdef _DEBUG
+	BOOL CMD;
 	// Open Console
 	CMD = AllocConsole();
 	freopen("CONOUT$", "w", stdout);
@@ -67,11 +69,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			config.configRoot[i] = '/';
 		}
 	}
+	sprintf(config.configRoot, "%s%s", config.configRoot, CONFIGPATH);
 	
 	sprintf((char*)configFilePath, GAMEINI, config.configRoot);
 	sprintf((char*)userFilePath, USERINI, config.configRoot);
     printf("Config path :\n>%s<\n>%s<\n>%s<\n>%s<\n\n", config.configRoot, configFilePath, userFilePath, DGVOODOOCONF);
-
+	
+	if (access((const char*)config.configRoot, 0) != 0){ // Check if the Config directory exists
+		printf(Labels[LBL_BuildConfig]);
+		CreateDirectory((const char*)config.configRoot, NULL);
+	}
 	if (access((const char*)configFilePath, 0) != 0){ // Check if the config file exists
 		printf(Labels[LBL_ConfigToDefault], "game");
 		fileCopy(DEF_GAMEINI, (char*)configFilePath); // Copy the default config file to "My Documents/Harry Potter II" Directory to be used by the game

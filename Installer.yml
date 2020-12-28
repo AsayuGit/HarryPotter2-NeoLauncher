@@ -1,5 +1,5 @@
 files:
-- noCDPatch:
+- GamePatch:
     filename: nocd.7z
     url: https://files.lonebullet.com/harry-potter-the-chamber-of-secrets/cracks/harry-potter-and-the-chamber-of-secrets-v10-english-no-cd.zip?
 - SysPatch:
@@ -28,7 +28,7 @@ installer:
     working_dir: $DISC
 - move:
     dst: $CACHE
-    src: noCDPatch
+    src: GamePatch
 - move:
     dst: $CACHE
     src: SysPatch
@@ -38,8 +38,6 @@ installer:
       7z x $CACHE/harry-potter-and-the-chamber-of-secrets-v10-english-no-cd.zip -o$GAMEDIR/"drive_c/Program Files/EA Games/$GAME_FOLDER/system" -aoa;
       7z x $CACHE/system.zip -o$GAMEDIR/"drive_c/Program Files/EA Games/$GAME_FOLDER/" -aoa;
       mv "$GAMEDIR/drive_c/Program Files/EA Games/$GAME_FOLDER" "$GAMEDIR/drive_c/Program Files/EA Games/Harry Potter and the Chamber of Secrets"
-- execute:
-    command: mkdir "$GAMEDIR/drive_c/users/$USER/My Documents/Harry Potter II"
 require-binaries: 7z
 system:
   disable_runtime: false

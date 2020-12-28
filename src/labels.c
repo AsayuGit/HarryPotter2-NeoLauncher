@@ -43,5 +43,6 @@ char* Labels[NBOFLABELS] = {
 	"Game starting : %s%s\n",
 	"Freeing ressources\n",
 	"Setting sound settings\n",
-	"Resetting %s config to default\n"
+	"Resetting %s config to default\n",
+	"Rebuilding config directory\n"
 };

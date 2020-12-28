@@ -53,6 +53,7 @@ enum LabelID{
 	LBL_Free,
 	LBL_SettingSoundSet,
 	LBL_ConfigToDefault,
+	LBL_BuildConfig,
 	NBOFLABELS
 };
 
