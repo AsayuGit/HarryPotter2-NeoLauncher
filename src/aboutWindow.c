@@ -1,6 +1,6 @@
 #include "aboutWindow.h"
 
-LPWSTR AboutText = L"Harry Potter 2 Neo Launcher\n\n2020 - Asayu";
+LPWSTR AboutText = L"Harry Potter 2 Neo Launcher\n\n2021 - Asayu";
 
 LRESULT CALLBACK aboutWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
     switch (msg)

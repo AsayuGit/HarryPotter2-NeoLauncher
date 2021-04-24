@@ -11,23 +11,28 @@ char* substr(char* Src, int Start, int End){
 }
 
 int fileCopy(char* Src, char* Dst){
+	/* Declaration */
 	FILE* SrcFile;
 	FILE* DstFile;
 	size_t SrcFileSize;
 	char* FileData;
 
+
+	/* Init */
 	SrcFile = NULL;
 	DstFile = NULL;
+	FileData = NULL;
 
-	SrcFile = fopen(Src, "rb"); // Try to open the source file in "read binary" mode
+	/* Logic */
+	SrcFile = fopen(Src, "rb"); /* Try to open the source file in "read binary" mode */
 	if (SrcFile == NULL){
 		fprintf(stderr, ErrorLabels[ERROR_FileNotFound], Src);
 		printf(ErrorLabels[ERROR_FileNotFound], Src);
 		goto Error;
 	}
-	fseek(SrcFile, 0, SEEK_END); // Go to the end of the file
-	SrcFileSize = ftell(SrcFile); // Get the file size
-	rewind(SrcFile); // Go back to the beginin of the file
+	fseek(SrcFile, 0, SEEK_END); /* Go to the end of the file */
+	SrcFileSize = ftell(SrcFile); /* Get the file size */
+	rewind(SrcFile); /* Go back to the beginin of the file */
 
 	FileData = (char*)malloc(sizeof(char)*SrcFileSize);
 	if (FileData == NULL){
@@ -36,15 +41,15 @@ int fileCopy(char* Src, char* Dst){
 		goto Error;
 	}
 
-	DstFile = fopen(Dst, "wb"); // Open (and create) the destination file in "write binary" mode
+	DstFile = fopen(Dst, "wb"); /* Open (and create) the destination file in "write binary" mode */
 
-	if (fread(FileData, 1, SrcFileSize, SrcFile) != SrcFileSize){ // Tries to load the content of the source file into memory
+	if (fread(FileData, 1, SrcFileSize, SrcFile) != SrcFileSize){ /* Tries to load the content of the source file into memory */
 		fprintf(stderr, ErrorLabels[ERROR_CantReadFile], Src);
 		printf(ErrorLabels[ERROR_CantReadFile], Src);
 		goto Error;
 	}
 
-	if (fwrite(FileData, 1, SrcFileSize, DstFile) != SrcFileSize){ // Trices to write the data into the destination file from memory
+	if (fwrite(FileData, 1, SrcFileSize, DstFile) != SrcFileSize){ /* Trices to write the data into the destination file from memory */
 		fprintf(stderr, ErrorLabels[ERROR_CantReadFile], Dst);
 		printf(ErrorLabels[ERROR_CantReadFile], Dst);
 		goto Error;
@@ -61,7 +66,7 @@ Error:
 	if (FileData)
 		free(FileData);
 
-	remove(Dst); // In case of error we remove the residual file
+	remove(Dst); /* In case of error we remove the residual file */
 	return -1;
 }
 
@@ -309,7 +314,7 @@ int setGameRenderDevice(gameConfig* config, int RenderDevice){
 		case DX7RENDERDEVICE:
 			printf("Direct3D\n");
 			sprintf(GameRenderDevice, "D3DDrv.D3DRenderDevice");
-			sprintf(passtrough, "true"); // Enable DGVoodoo2 directX Passtrough
+			sprintf(passtrough, "true"); /* Enable DGVoodoo2 directX Passtrough */
 			break;
 
 		case DX11RENDERDEVICE:
@@ -320,7 +325,7 @@ int setGameRenderDevice(gameConfig* config, int RenderDevice){
 		case DGVOODOO2RENDERDEVICE:
 			printf("DGVoodoo2\n");
 			sprintf(GameRenderDevice, "D3DDrv.D3DRenderDevice");
-			sprintf(passtrough, "false"); // Disable DGVoodoo2 directX Passtrough
+			sprintf(passtrough, "false"); /* Disable DGVoodoo2 directX Passtrough */
 			break;
 		
 		default:
@@ -362,21 +367,21 @@ int fixGameSettings(gameConfig* config){
 
 	printf(Labels[LBL_PatchingSettings]);
 
-	// Set texture and object details to the highest settings
+	/* Set texture and object details to the highest settings */
 	iniSetKey(config->userFile, "Engine.PlayerPawn", "ObjectDetail", "ObjectDetailVeryHigh");
 	iniSetKey(config->configFile, "WinDrv.WindowsClient", "SkinDetail", "High");
 	iniSetKey(config->configFile, "WinDrv.WindowsClient", "TextureDetail", "High");
 	iniSetKey(config->configFile, "WinDrv.WindowsClient", "LowDetailTextures", "False");
 	iniSetKey(config->configFile, "WinDrv.WindowsClient", "NoDynamicLights", "False");
 
-	// Fix the transparency issues
+	/* Fix the transparency issues */
 	iniSetKey(config->configFile, "D3DDrv.D3DRenderDevice", "UsePrecache", "False");
 
-	// Fix the camea spin
+	/* Fix the camea spin */
 	iniSetKey(config->configFile, "WinDrv.WindowsClient", "DeadZoneRUV", "True");
 	iniSetKey(config->configFile, "WinDrv.WindowsClient", "DeadZoneXYZ", "True");
 	
-	// CD Quality audio
+	/* CD Quality audio */
 	iniSetKey(config->configFile, "Audio.GenericAudioSubsystem", "OutputRate", "44100Hz");
 	return 0;
 }
@@ -391,12 +396,12 @@ void RunGame(int argc, char *argv[], int saveFile, char load){
 	}else{
 		args = START;
 	}
-	cmdLength = strlen(args) + 2; // +1 Savefile number, +1 '\0'
+	cmdLength = strlen(args) + 2; /* +1 Savefile number, +1 '\0' */
 	sprintf(command, "start /wait %s%s%d", RUN_COMMAND, args, saveFile);
 
     printf("%s", command);
 	system(command);
-	//spawnl(P_NOWAIT, RUN_COMMAND, command, NULL);
+	/*spawnl(P_NOWAIT, RUN_COMMAND, command, NULL); */
 }
 
 void PatchAndRun(gameConfig* config){
@@ -427,16 +432,16 @@ void CenterWindow(HWND hwnd){
     int win_w, win_h;
     int screen_w, screen_h;
 
-    // Get the window's with and height
+    /* Get the window's with and height */
     GetWindowRect(hwnd, &rc);
     win_w = rc.right - rc.left;
     win_h = rc.bottom - rc.top;
 
-    // Get the screen's resolution
+    /* Get the screen's resolution */
     screen_w = GetSystemMetrics(SM_CXSCREEN);
     screen_h = GetSystemMetrics(SM_CYSCREEN);
 
-    // Set the windows x and y corrdinates relative to the screen (calculated to be centered)
+    /* Set the windows x and y corrdinates relative to the screen (calculated to be centered) */
     SetWindowPos(hwnd, HWND_TOP, (screen_w - win_w) / 2, (screen_h - win_h) / 2, 0, 0, SWP_NOSIZE);
 }
 
@@ -449,7 +454,7 @@ void DrawBUTTON(LPDRAWITEMSTRUCT pDIS, HDC displayDeviceHandle, HBITMAP ButtonUp
 	Vector2i Offset;
 
     buttonTextLength = GetWindowTextLengthW(pDIS->hwndItem) + 1;
-	buttonText = (LPWSTR)malloc(sizeof(WCHAR)*buttonTextLength); // We reserve some memory to store the text
+	buttonText = (LPWSTR)malloc(sizeof(WCHAR)*buttonTextLength); /* We reserve some memory to store the text */
     GetWindowTextW(pDIS->hwndItem, buttonText, buttonTextLength);
     buttonTextLength--;
 
@@ -460,16 +465,16 @@ void DrawBUTTON(LPDRAWITEMSTRUCT pDIS, HDC displayDeviceHandle, HBITMAP ButtonUp
     }
 
 	GetWindowRect(pDIS->hwndItem, &ButtonRect);
-    GetObject(buttonStateTexture, sizeof(BITMAP), &bm); // Get the texture information
+    GetObject(buttonStateTexture, sizeof(BITMAP), &bm); /* Get the texture information */
     
 	Offset.x = ((ButtonRect.right - ButtonRect.left) - bm.bmWidth) >> 1;
 	Offset.y = ((ButtonRect.bottom - ButtonRect.top) - bm.bmHeight) >> 1;
 
-	//SetBkColor(pDIS->hDC, RGB(0, 0, 0));
+	/* SetBkColor(pDIS->hDC, RGB(0, 0, 0));  */
 	FillRect(pDIS->hDC, &pDIS->rcItem, CreateSolidBrush(0));
 	
-	SelectObject(displayDeviceHandle, buttonStateTexture); // Select an object to be used with the display device
-	BitBlt(pDIS->hDC, Offset.x, Offset.y, bm.bmWidth, bm.bmHeight, displayDeviceHandle, 0, 0, SRCCOPY); // Draw the texture to the button
+	SelectObject(displayDeviceHandle, buttonStateTexture); /* Select an object to be used with the display device */
+	BitBlt(pDIS->hDC, Offset.x, Offset.y, bm.bmWidth, bm.bmHeight, displayDeviceHandle, 0, 0, SRCCOPY); /* Draw the texture to the button */
 
 	if ((Frame != NULL) && (FrameRct != NULL)){
 		SelectObject(displayDeviceHandle, Frame);
@@ -480,7 +485,7 @@ void DrawBUTTON(LPDRAWITEMSTRUCT pDIS, HDC displayDeviceHandle, HBITMAP ButtonUp
     SetTextColor(pDIS->hDC, RGB(255, 255, 255));
     SelectObject(pDIS->hDC, hFont);
     DrawTextW(pDIS->hDC, buttonText, buttonTextLength, &pDIS->rcItem, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-	free(buttonText); // We free the memory we allocated to prevent memory leaks
+	free(buttonText); /* We free the memory we allocated to prevent memory leaks */
 }
 
 void redrawControl(HWND control, HWND window){

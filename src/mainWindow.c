@@ -2,8 +2,6 @@
 #include "Mmsystem.h"
 
 #define WM_CHANGEUISTATE 0x0127
-//#define UIS_SET 1
-//#define UISF_HIDEFOCUS 0x1
 
 enum WindowId{
 	ID_SAVEBUTTON = 1,
@@ -39,49 +37,49 @@ enum WindowId{
 
 gameConfig *config;
 
-// Labels
+/* Labels */
 HWND bottomText;
 HWND L_SecTitle, L_OpSecTitle, L_Section1, L_Section2;
 HWND L_SaveTitle;
 
-// Main Menu Buttons
+/* Main Menu Buttons */
 HWND B_NEWGAME, B_LOADGAME, B_OPTIONS, B_QUIT;
 
-// Option Menu Buttons
+/* Option Menu Buttons */
 HWND B_VIDEO, B_SOUND, B_JOYSTICK, B_BACK, R_DX7, R_DX11, R_VD;
 
 HWND B_OK;
 
-// Saves Menu Buttons
+/* Saves Menu Buttons */
 HWND B_SAVE[6];
 
-// List Boxes
+/* List Boxes */
 HWND resSelect;
 
-// ComboBoxs
+/* ComboBoxs */
 HWND CB_BPP;
 
-// CustomRes Edits
+/* CustomRes Edits */
 HWND E_CUSTOMRESX, E_CUSTOMRESY;
 
-// CustomRes UpDowns
+/* CustomRes UpDowns */
 HWND UD_CUSTOMRESX, UD_CUSTOMRESY;
 
-// Sound Trackbars
+/* Sound Trackbars */
 HWND TB_SndVol, TB_MusVol;
 HWND TB_SndVolBuddy[2];
 HWND TB_MusVolBuddy[2];
 
-// Check Boxes
+/* Check Boxes */
 HWND CK_Mute;
 
-// Game Icon
+/* Game Icon */
 HICON Icon;
 
-// Background
+/* Background */
 HBITMAP Background;
 
-// Bitmap buttons
+/* Bitmap buttons */
 HBITMAP ButtonUpTexture;
 HBITMAP ButtonDownTexture;
 
@@ -90,14 +88,14 @@ HBITMAP SaveButtonDownTexture;
 
 HBITMAP SaveThumbTexture[6];
 
-// Colors
+/* Colors */
 COLORREF ForegroundColor;
 COLORREF BackgroundColor;
 
-// Font
+/* Font */
 HFONT hFont;
 
-// Sounds
+/* Sounds */
 char* Button[3];
 char* Rollover[2];
 
@@ -285,7 +283,7 @@ void MW_CreateTrackbars(HWND hwnd){
 	TB_SndVolBuddy[1] = CreateWindowW(L"STATIC", L"High", WS_CHILD | SS_RIGHT, TrackbarPos.x + TrackbarSize.x + LabelOffsetRight, TrackbarPos.y + LabelOffsetY, LabelWidth, LabelHeight, hwnd, NULL, NULL, NULL);
 	TB_MusVolBuddy[1] = CreateWindowW(L"STATIC", L"High", WS_CHILD | SS_RIGHT, TrackbarPos.x + TrackbarSize.x + LabelOffsetRight, TrackbarPos.y + TrackbarOffsetY + LabelOffsetY, LabelWidth, LabelHeight, hwnd, NULL, NULL, NULL);
 
-	// Set font
+	/* Set font */
 	SendMessageW(TB_SndVolBuddy[0], WM_SETFONT, (WPARAM)hFont, 0);
 	SendMessageW(TB_SndVolBuddy[1], WM_SETFONT, (WPARAM)hFont, 0);
 	SendMessageW(TB_MusVolBuddy[0], WM_SETFONT, (WPARAM)hFont, 0);
@@ -293,7 +291,7 @@ void MW_CreateTrackbars(HWND hwnd){
 }
 
 INT_PTR setWindowTheme(HWND hwnd, HDC hdc){
-	SetTextColor(hdc, ForegroundColor); // Change the text color
+	SetTextColor(hdc, ForegroundColor); /* Change the text color */
 	SetBkMode(hdc, TRANSPARENT);
 	return (INT_PTR)GetStockObject(HOLLOW_BRUSH);
 }
@@ -492,16 +490,16 @@ void setSoundWindowProc(int nCmdShow, HWND hwnd){
 }
 
 LRESULT CALLBACK soundWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
-    LPDRAWITEMSTRUCT pDIS; // Owner drawn control structure
+    LPDRAWITEMSTRUCT pDIS; /* Owner drawn control structure */
 	BOOL UseSound;
 	double SoundVolume, MusicVolume;
     
     switch (msg)
     {
 
-    case WM_CTLCOLORSTATIC: // Called when a static control is about to be drawn
-		if (((HWND)lParam == TB_SndVol) || ((HWND)lParam == TB_MusVol)){ //Mmmh
-			SetTextColor((HDC)wParam, ForegroundColor); // Change the text color
+    case WM_CTLCOLORSTATIC: /* Called when a static control is about to be drawn */
+		if (((HWND)lParam == TB_SndVol) || ((HWND)lParam == TB_MusVol)){ /*Mmmh */
+			SetTextColor((HDC)wParam, ForegroundColor); /* Change the text color */
 			SetBkColor((HDC)wParam, BackgroundColor);
 			return (INT_PTR) CreateSolidBrush(BackgroundColor);
 		}
@@ -514,7 +512,7 @@ LRESULT CALLBACK soundWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		{
 		case ID_OK:
 		case ID_BACK:
-			DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); // We draw our custom button ourselves
+			DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); /* We draw our custom button ourselves */
 			break;
 
 		default:
@@ -561,24 +559,24 @@ LRESULT CALLBACK soundWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
     case WM_DESTROY:
 		MW_CleanUpAssets();
-        PostQuitMessage(0); // The "return" of our window
+        PostQuitMessage(0); /* The "return" of our window */
         break;
     
     default:
         break;
     }
 
-    // Call the default window procedure to prossess all the remaining window messages (event)
+    /* Call the default window procedure to prossess all the remaining window messages (event) */
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK savesWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
-    LPDRAWITEMSTRUCT pDIS; // Owner drawn control structure
+    LPDRAWITEMSTRUCT pDIS; /* Owner drawn control structure */
     
     switch (msg)
     {
 
-    case WM_CTLCOLORSTATIC: // Called when a static control is about to be drawn
+    case WM_CTLCOLORSTATIC: /* Called when a static control is about to be drawn */
 		return setWindowTheme((HWND)lParam, (HDC)wParam);
         break;
 
@@ -586,15 +584,15 @@ LRESULT CALLBACK savesWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         pDIS = (LPDRAWITEMSTRUCT)lParam;
 		if ((pDIS->CtlID >= ID_SAVEBUTTON) && (pDIS->CtlID <= ID_SAVEBUTTON + 5)){
 			if ((SaveThumbTexture[pDIS->CtlID - 1] == NULL) && (config->loadSave)){
-				DrawBUTTON(pDIS, displayDeviceHandle, SaveButtonDownTexture, SaveButtonDownTexture, NULL, NULL, hFont); // We draw our custom button ourselves
+				DrawBUTTON(pDIS, displayDeviceHandle, SaveButtonDownTexture, SaveButtonDownTexture, NULL, NULL, hFont); /* We draw our custom button ourselves */
 			} else {
-				DrawBUTTON(pDIS, displayDeviceHandle, SaveButtonUpTexture, SaveButtonDownTexture, SaveThumbTexture[pDIS->CtlID - 1], &FrameRct, hFont); // We draw our custom button ourselves
+				DrawBUTTON(pDIS, displayDeviceHandle, SaveButtonUpTexture, SaveButtonDownTexture, SaveThumbTexture[pDIS->CtlID - 1], &FrameRct, hFont); /* We draw our custom button ourselves */
 			}
 		}else{
 			switch (pDIS->CtlID)
 			{
 			case ID_BACK:
-				DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); // We draw our custom button ourselves
+				DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); /* We draw our custom button ourselves */
 				break;
 
 			default:
@@ -612,7 +610,7 @@ LRESULT CALLBACK savesWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 					config->saveFile = (char)LOWORD(wParam);
 					MW_CleanUpAssets();
 					PostQuitMessage(0);
-					//PatchAndRun(config);
+					/*PatchAndRun(config); */
 				}
 			} else {
 				switch (LOWORD(wParam)) {
@@ -636,26 +634,26 @@ LRESULT CALLBACK savesWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
     case WM_DESTROY:
 		MW_CleanUpAssets();
-        PostQuitMessage(0); // The "return" of our window
+        PostQuitMessage(0); /* The "return" of our window */
         break;
     
     default:
         break;
     }
 
-    // Call the default window procedure to prossess all the remaining window messages (event)
+    /* Call the default window procedure to prossess all the remaining window messages (event) */
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK videoWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
 	int ret, gameRenderDevice;
 	int CustomResX, CustomResY;
-    LPDRAWITEMSTRUCT pDIS; // Owner drawn control structure
+    LPDRAWITEMSTRUCT pDIS; /* Owner drawn control structure */
     
     switch (msg)
     {
 
-    case WM_CTLCOLORSTATIC: // Called when a static control is about to be drawn
+    case WM_CTLCOLORSTATIC: /* Called when a static control is about to be drawn */
 		return setWindowTheme((HWND)lParam, (HDC)wParam);
         break;
 
@@ -665,7 +663,7 @@ LRESULT CALLBACK videoWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
         {
         case ID_BACK:
 		case ID_OK:
-            DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); // We draw our custom button ourselves
+            DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); /* We draw our custom button ourselves */
             break;
 
         default:
@@ -698,7 +696,7 @@ LRESULT CALLBACK videoWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 					}
 
 					if (ret > -1){
-						if (ret == config->nbOfRes){ // Custom Res
+						if (ret == config->nbOfRes){ /* Custom Res */
 							if (gameRenderDevice == DGVOODOO2RENDERDEVICE){
 								CustomResX = (int)SendMessageW(UD_CUSTOMRESX, UDM_GETPOS32, 0, 0);
 								CustomResY = (int)SendMessageW(UD_CUSTOMRESY, UDM_GETPOS32, 0, 0);
@@ -709,7 +707,7 @@ LRESULT CALLBACK videoWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 							}else{
 								setGameRes((int)SendMessageW(UD_CUSTOMRESX, UDM_GETPOS32, 0, 0), (int)SendMessageW(UD_CUSTOMRESY, UDM_GETPOS32, 0, 0), 32 - (int)SendMessageW(CB_BPP, CB_GETCURSEL, 0, 0) * 16, config);
 							}
-						} else if (ret == config->nbOfRes + 1) { // Max Res
+						} else if (ret == config->nbOfRes + 1) { /* Max Res */
 							CustomResY = GetSystemMetrics(SM_CYSCREEN);
 							CustomResX = (int)((CustomResY / 3.0f) * 4.0f);
 							SendMessageW(UD_CUSTOMRESX, UDM_SETPOS32, 0, CustomResX);
@@ -717,7 +715,7 @@ LRESULT CALLBACK videoWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 							setGameRes(1024, 768, 32, config);
 							setVoodooRes(0 , 0, config);
-						} else { // Preset Res
+						} else { /* Preset Res */
 							SendMessageW(UD_CUSTOMRESX, UDM_SETPOS32, 0, config->availableRes[ret].ResX);
 							SendMessageW(UD_CUSTOMRESY, UDM_SETPOS32, 0, config->availableRes[ret].ResY);
 							
@@ -758,24 +756,24 @@ LRESULT CALLBACK videoWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
     case WM_DESTROY:
 		MW_CleanUpAssets();
-        PostQuitMessage(0); // The "return" of our window
+        PostQuitMessage(0); /* The "return" of our window */
         break;
     
     default:
         break;
     }
 
-    // Call the default window procedure to prossess all the remaining window messages (event)
+    /* Call the default window procedure to prossess all the remaining window messages (event) */
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK optionsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
-    LPDRAWITEMSTRUCT pDIS; // Owner drawn control structure
+    LPDRAWITEMSTRUCT pDIS; /* Owner drawn control structure */
     
     switch (msg)
     {
 
-    case WM_CTLCOLORSTATIC: // Called when a static control is about to be drawn
+    case WM_CTLCOLORSTATIC: /* Called when a static control is about to be drawn */
 		return setWindowTheme((HWND)lParam, (HDC)wParam);
         break;
 
@@ -787,7 +785,7 @@ LRESULT CALLBACK optionsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 		case ID_SOUND:
 		case ID_JOYSTICK:
         case ID_BACK:
-            DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); // We draw our custom button ourselves
+            DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); /* We draw our custom button ourselves */
             break;
 
         default:
@@ -810,7 +808,7 @@ LRESULT CALLBACK optionsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 			} else if (LOWORD(wParam) == ID_JOYSTICK){
 				playRandButton();
 				system("start joy.cpl");
-				//system("start JoyToKey.exe");
+				/*system("start JoyToKey.exe"); */
 			} else if (LOWORD(wParam) == ID_BACK){
 				playRandButton();
 				setOptionsWindowProc(SW_HIDE, hwnd);
@@ -829,22 +827,22 @@ LRESULT CALLBACK optionsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
     case WM_DESTROY:
 		MW_CleanUpAssets();
-        PostQuitMessage(0); // The "return" of our window
+        PostQuitMessage(0); /* The "return" of our window */
         break;
     
     default:
         break;
     }
 
-    // Call the default window procedure to prossess all the remaining window messages (event)
+    /* Call the default window procedure to prossess all the remaining window messages (event) */
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
-// Window Procedure
+/* Window Procedure */
 LRESULT CALLBACK mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
     HWND BackgroundWindow;
 
-    LPDRAWITEMSTRUCT pDIS; // Owner drawn control structure
+    LPDRAWITEMSTRUCT pDIS; /* Owner drawn control structure */
     
     switch (msg)
     {
@@ -868,10 +866,10 @@ LRESULT CALLBACK mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		MW_CreateComboBoxes(hwnd);
 		MW_CreateTrackbars(hwnd);
 
-		SendMessage(hwnd, WM_CHANGEUISTATE, (WPARAM)(0x10001),(LPARAM)(0)); // Dissable selection rect
+		SendMessage(hwnd, WM_CHANGEUISTATE, (WPARAM)(0x10001),(LPARAM)(0)); /* Dissable selection rect */
         break;
 
-    case WM_CTLCOLORSTATIC: // Called when a static control is about to be drawn
+    case WM_CTLCOLORSTATIC: /* Called when a static control is about to be drawn */
 		return setWindowTheme((HWND)lParam, (HDC)wParam);
         break;
 
@@ -883,7 +881,7 @@ LRESULT CALLBACK mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         case ID_LOADGAME:
         case ID_OPTIONS:
         case ID_QUIT:
-            DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); // We draw our custom button ourselves
+            DrawBUTTON(pDIS, displayDeviceHandle, ButtonUpTexture, ButtonDownTexture, NULL, NULL, hFont); /* We draw our custom button ourselves */
             break;
 
         default:
@@ -926,13 +924,13 @@ LRESULT CALLBACK mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
     case WM_DESTROY:
 		MW_CleanUpAssets();
-        PostQuitMessage(0); // The "return" of our window
+        PostQuitMessage(0); /* The "return" of our window */
         break;
     
     default:
         break;
     }
 
-    // Call the default window procedure to prossess all the remaining window messages (event)
+    /* Call the default window procedure to prossess all the remaining window messages (event) */
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }

@@ -34,7 +34,7 @@
 #define DGVOODOOCONF "dgVoodoo.conf"
 #endif
 
-#define SAVETHUMBPATH "%s/"CONFIGPATH"Save/Slot%d/Save%d.bmp"
+#define SAVETHUMBPATH "%s/Save/Slot%d/Save%d.bmp"
 #define ICONPATH "Game.ico"
 
 #define ASSETS "../help/"
@@ -43,7 +43,7 @@
 #define LOAD " -LOADGAME=0 -SAVESLOT="
 #define START " PrivetDr.unr -SAVESLOT="
 
-#define VERSION L"Version v1.1"
+#define VERSION L"Version v1.2"
 #define GITLINK L"https://github.com/AsayuGit"
 
 #endif
